@@ -28,6 +28,20 @@ async function run() {
         const orderCollection = database.collection('orders');
 
         // --------------------------Cars API--------------------------
+        // GET cars
+        app.get('/cars', async (req, res) => {
+            const cursor = carCollection.find({});
+            const cars = await cursor.toArray();
+            res.send(cars);
+        });
+
+        // Find one car by id
+        app.get('/cars/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await carCollection.findOne(query);
+            res.send(result);
+        });
 
         // ---------------------------Orders API---------------------------
 
