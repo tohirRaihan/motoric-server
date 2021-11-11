@@ -73,6 +73,42 @@ async function run() {
             );
             res.json(result);
         });
+
+        // chesk if a user is admin or not
+        app.get('/users/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { email: email };
+            const user = await userCollection.findOne(query);
+            let isAdmin = false;
+            if (user?.role === 'admin') {
+                isAdmin = true;
+            }
+            res.json({ admin: isAdmin });
+        });
+
+        // update user with admin role
+        app.put('/users/admin', async (req, res) => {
+            const user = req.body;
+            const requester = user.email;
+            if (requester) {
+                const requesterAccount = await userCollection.findOne({
+                    email: requester
+                });
+                if (requesterAccount.role === 'admin') {
+                    const filter = { email: user.email };
+                    const updateDoc = { $set: { role: 'admin' } };
+                    const result = await usersCollection.updateOne(
+                        filter,
+                        updateDoc
+                    );
+                    res.json(result);
+                }
+            } else {
+                res.status(403).json({
+                    message: 'you do not have access to make admin'
+                });
+            }
+        });
     } finally {
         // await client.close();
     }
