@@ -26,6 +26,7 @@ async function run() {
         const database = client.db('motoric');
         const carCollection = database.collection('cars');
         const orderCollection = database.collection('orders');
+        const userCollection = database.collection('users');
 
         // --------------------------Cars API--------------------------
         // GET cars
@@ -46,13 +47,32 @@ async function run() {
         // ---------------------------Orders API---------------------------
         // CREATE order
         app.post('/orders', async (req, res) => {
-            console.log(req.body);
             const newOrder = req.body;
-            console.log(newOrder);
             const result = await orderCollection.insertOne(newOrder);
             res.json(result);
         });
 
+        // ---------------------------Users API---------------------------
+        // Create new user
+        app.post('/users', async (req, res) => {
+            const user = req.body;
+            const result = await userCollection.insertOne(user);
+            res.json(result);
+        });
+
+        // Update or Insert user
+        app.put('/users', async (req, res) => {
+            const user = req.body;
+            const filter = { email: user.email };
+            const options = { upsert: true };
+            const updateDoc = { $set: user };
+            const result = await userCollection.updateOne(
+                filter,
+                updateDoc,
+                options
+            );
+            res.json(result);
+        });
     } finally {
         // await client.close();
     }
