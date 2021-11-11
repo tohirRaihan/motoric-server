@@ -44,6 +44,14 @@ async function run() {
         });
 
         // ---------------------------Orders API---------------------------
+        // CREATE order
+        app.post('/orders', async (req, res) => {
+            console.log(req.body);
+            const newOrder = req.body;
+            console.log(newOrder);
+            const result = await orderCollection.insertOne(newOrder);
+            res.json(result);
+        });
 
     } finally {
         // await client.close();
