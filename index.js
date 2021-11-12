@@ -45,6 +45,15 @@ async function run() {
         });
 
         // ---------------------------Orders API---------------------------
+        // FIND orders by a user id
+        app.get('/orders/:userId', async (req, res) => {
+            const userId = req.params.userId;
+            const query = { userId: userId };
+            const cursor = orderCollection.find(query);
+            const orders = await cursor.toArray();
+            res.send(orders);
+        });
+
         // CREATE order
         app.post('/orders', async (req, res) => {
             const newOrder = req.body;
