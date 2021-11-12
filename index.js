@@ -44,6 +44,13 @@ async function run() {
             res.send(result);
         });
 
+        // CREATE car
+        app.post('/cars', async (req, res) => {
+            const newCar = req.body;
+            const result = await carCollection.insertOne(newCar);
+            res.json(result);
+        });
+
         // ---------------------------Orders API---------------------------
         // FIND orders by a user id
         app.get('/orders/:userId', async (req, res) => {
