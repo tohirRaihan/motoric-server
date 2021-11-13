@@ -27,6 +27,7 @@ async function run() {
         const carCollection = database.collection('cars');
         const orderCollection = database.collection('orders');
         const userCollection = database.collection('users');
+        const reviewCollection = database.collection('reviews');
 
         // --------------------------Cars API--------------------------
         // GET cars
@@ -147,6 +148,15 @@ async function run() {
             const result = await userCollection.updateOne(filter, updateDoc);
             res.json(result);
         });
+
+        // ---------------------------Reviews API---------------------------
+        // CREATE Review
+        app.post('/reviews', async (req, res) => {
+            const newReview = req.body;
+            const result = await reviewCollection.insertOne(newReview);
+            res.json(result);
+        });
+
     } finally {
         // await client.close();
     }
