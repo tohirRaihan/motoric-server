@@ -150,6 +150,13 @@ async function run() {
         });
 
         // ---------------------------Reviews API---------------------------
+        // GET reviews
+        app.get('/reviews', async (req, res) => {
+            const cursor = reviewCollection.find({});
+            const reviews = await cursor.toArray();
+            res.send(reviews);
+        });
+
         // CREATE Review
         app.post('/reviews', async (req, res) => {
             const newReview = req.body;
